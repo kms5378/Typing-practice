@@ -27,3 +27,273 @@ input,
 textarea {
   font: inherit;
 }
+
+.app-shell {
+  min-height: 100vh;
+  padding: 32px;
+}
+
+.setup-panel,
+.practice-panel {
+  width: min(1120px, 100%);
+  margin: 0 auto;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 28px;
+  box-shadow: 0 18px 50px rgba(23, 32, 51, 0.08);
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  font-size: 40px;
+  line-height: 1.15;
+}
+
+.lede {
+  max-width: 640px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+  margin: 24px 0 16px;
+  font-weight: 700;
+}
+
+.field input,
+.typing-area textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--ink);
+  background: #fff;
+}
+
+.field input {
+  height: 44px;
+  padding: 0 12px;
+}
+
+.mode-row {
+  display: inline-grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #eef2f7;
+}
+
+.mode-row button,
+.primary-action,
+.profile-card {
+  cursor: pointer;
+}
+
+.mode-row button {
+  min-width: 110px;
+  border: 0;
+  border-radius: 6px;
+  padding: 10px 14px;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.mode-row button.selected {
+  background: var(--panel);
+  color: var(--primary);
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+  gap: 12px;
+  margin: 24px 0;
+}
+
+.profile-card {
+  min-height: 150px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  padding: 14px;
+  display: grid;
+  place-items: center;
+  gap: 8px;
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.profile-card.selected {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+
+.profile-card img {
+  width: 82px;
+  height: 82px;
+  object-fit: contain;
+}
+
+.primary-action {
+  border: 0;
+  border-radius: 8px;
+  background: var(--primary);
+  color: var(--primary-ink);
+  min-height: 46px;
+  padding: 0 18px;
+  font-weight: 800;
+}
+
+.primary-action:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.practice-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 20px;
+}
+
+.trainer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.trainer img {
+  width: 58px;
+  height: 58px;
+  object-fit: contain;
+  background: #eef2f7;
+  border-radius: 8px;
+}
+
+.trainer div {
+  display: grid;
+  gap: 4px;
+}
+
+.trainer span,
+.stats span {
+  color: var(--muted);
+}
+
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.stats span {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px 10px;
+  background: #f8fafc;
+  font-weight: 700;
+}
+
+.typing-area,
+.result-area {
+  display: grid;
+  gap: 20px;
+  padding-top: 28px;
+}
+
+.sentence {
+  margin: 0;
+  border-left: 4px solid var(--primary);
+  padding: 18px;
+  background: #f8fafc;
+  border-radius: 8px;
+  font-size: 24px;
+  line-height: 1.6;
+  word-break: keep-all;
+}
+
+.typing-area textarea {
+  min-height: 160px;
+  padding: 16px;
+  resize: vertical;
+  font-size: 20px;
+  line-height: 1.6;
+}
+
+.result-area h2,
+.result-area h3 {
+  margin: 0;
+}
+
+.ranking-list {
+  display: grid;
+  gap: 10px;
+  padding: 0;
+  margin: 0;
+  list-style-position: inside;
+}
+
+.ranking-list li {
+  display: grid;
+  grid-template-columns: 36px 1fr auto auto;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px;
+  background: #fff;
+}
+
+.ranking-list img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
+
+@media (max-width: 720px) {
+  .app-shell {
+    padding: 14px;
+  }
+
+  .setup-panel,
+  .practice-panel {
+    padding: 18px;
+  }
+
+  h1 {
+    font-size: 30px;
+  }
+
+  .practice-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .stats {
+    justify-content: flex-start;
+  }
+
+  .sentence {
+    font-size: 20px;
+  }
+
+  .ranking-list li {
+    grid-template-columns: 32px 1fr;
+  }
+}

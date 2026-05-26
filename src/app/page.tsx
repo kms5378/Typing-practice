@@ -1,3 +1,5 @@
+import TypingPracticeApp from "@/components/TypingPracticeApp";
+
 export default function Home() {
-  return <main>Typing Practice</main>;
+  return <TypingPracticeApp />;
 }
