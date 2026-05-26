@@ -44,6 +44,20 @@ describe("TypingPracticeApp", () => {
     expect(screen.getByText("오늘도 차분하게 타자 연습을 시작합니다.")).toBeInTheDocument();
   });
 
+  it("returns to setup from an active practice session", () => {
+    render(<TypingPracticeApp />);
+    fireEvent.change(screen.getByLabelText("닉네임"), { target: { value: "Misty" } });
+    fireEvent.click(screen.getByRole("button", { name: "피카츄 선택" }));
+    fireEvent.click(screen.getByRole("button", { name: "연습 시작" }));
+
+    fireEvent.change(screen.getByLabelText("입력"), { target: { value: "진행 중 입력" } });
+    fireEvent.click(screen.getByRole("button", { name: "처음으로" }));
+
+    expect(screen.getByText("Pokemon Typing Practice")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "연습 시작" })).toBeInTheDocument();
+    expect(screen.queryByLabelText("입력")).not.toBeInTheDocument();
+  });
+
   it("shows result after completing all sentences", async () => {
     render(<TypingPracticeApp />);
     fireEvent.change(screen.getByLabelText("닉네임"), { target: { value: "Brock" } });

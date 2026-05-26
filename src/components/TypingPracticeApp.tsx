@@ -48,6 +48,17 @@ export default function TypingPracticeApp() {
     setRankingMessage("");
   }
 
+  function resetToSetup() {
+    setPhase("setup");
+    setSentenceIndex(0);
+    setTyped("");
+    setTypedHistory([]);
+    setStartedAt(null);
+    setFinishedAt(null);
+    setRankings([]);
+    setRankingMessage("");
+  }
+
   async function finishPractice(nextHistory: string[]) {
     const end = Date.now();
     setFinishedAt(end);
@@ -160,10 +171,15 @@ export default function TypingPracticeApp() {
               <span>{profile.nameKo}</span>
             </div>
           </div>
-          <div className="stats">
-            <span>진행률 {progress}%</span>
-            <span>정확도 {accuracy}%</span>
-            <span>타수 {cpm}</span>
+          <div className="practice-actions">
+            <div className="stats">
+              <span>진행률 {progress}%</span>
+              <span>정확도 {accuracy}%</span>
+              <span>타수 {cpm}</span>
+            </div>
+            <button className="secondary-action" onClick={resetToSetup}>
+              처음으로
+            </button>
           </div>
         </header>
 

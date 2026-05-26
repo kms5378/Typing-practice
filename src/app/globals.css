@@ -162,6 +162,17 @@ h1 {
   opacity: 0.5;
 }
 
+.secondary-action {
+  min-height: 38px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  cursor: pointer;
+  font-weight: 800;
+  padding: 0 14px;
+}
+
 .practice-header {
   display: flex;
   align-items: center;
@@ -193,6 +204,14 @@ h1 {
 .trainer span,
 .stats span {
   color: var(--muted);
+}
+
+.practice-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: flex-end;
 }
 
 .stats {
