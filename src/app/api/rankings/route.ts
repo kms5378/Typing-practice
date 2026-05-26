@@ -9,9 +9,19 @@ function parseLanguage(value: string | null): PracticeLanguage {
 }
 
 export async function GET(request: NextRequest) {
-  const language = parseLanguage(request.nextUrl.searchParams.get("language"));
-  const rankings = await getRankings(language);
-  return NextResponse.json({ rankings });
+  try {
+    const language = parseLanguage(request.nextUrl.searchParams.get("language"));
+    const rankings = await getRankings(language);
+    return NextResponse.json({ rankings });
+  } catch {
+    return NextResponse.json(
+      {
+        rankings: [],
+        message: "Vercel KV 또는 Redis 환경 변수를 연결하면 공용 랭킹이 활성화됩니다."
+      },
+      { status: 503 }
+    );
+  }
 }
 
 export async function POST(request: NextRequest) {
