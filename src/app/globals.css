@@ -298,6 +298,13 @@ h1 {
   word-break: keep-all;
 }
 
+.incorrect-char {
+  color: var(--danger);
+  font-weight: 800;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+}
+
 .typing-area textarea {
   min-height: 160px;
   padding: 16px;

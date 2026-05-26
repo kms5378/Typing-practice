@@ -8,8 +8,9 @@ describe("practice texts", () => {
   });
 
   it("has long practice passages for Korean and English", () => {
-    expect(longPracticeTexts.ko.length).toBeGreaterThanOrEqual(3);
-    expect(longPracticeTexts.en.length).toBeGreaterThanOrEqual(3);
+    expect(longPracticeTexts.ko).toHaveLength(5);
+    expect(longPracticeTexts.en).toHaveLength(5);
+    expect(longPracticeTexts.ko.length + longPracticeTexts.en.length).toBe(10);
     expect(longPracticeTexts.ko[0].text.length).toBeGreaterThan(120);
     expect(longPracticeTexts.en[0].text.length).toBeGreaterThan(120);
   });

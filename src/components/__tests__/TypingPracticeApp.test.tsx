@@ -42,7 +42,7 @@ describe("TypingPracticeApp", () => {
     fireEvent.change(screen.getByLabelText("닉네임"), { target: { value: "Misty" } });
     fireEvent.click(screen.getByRole("button", { name: "피카츄 선택" }));
     fireEvent.click(screen.getByRole("button", { name: "연습 시작" }));
-    expect(screen.getByText(practiceTexts.ko[0])).toBeInTheDocument();
+    expect(screen.getByTestId("current-prompt")).toHaveTextContent(practiceTexts.ko[0]);
   });
 
   it("starts long-form Korean practice from the long practice tab", () => {
@@ -52,7 +52,18 @@ describe("TypingPracticeApp", () => {
     fireEvent.click(screen.getByRole("button", { name: "달빛 아래의 길 선택" }));
     fireEvent.click(screen.getByRole("button", { name: "연습 시작" }));
 
-    expect(screen.getByText(/달빛이 낮게 내려앉은 마을 길/)).toBeInTheDocument();
+    expect(screen.getByTestId("current-prompt")).toHaveTextContent(/달빛이 낮게 내려앉은 마을 길/);
+  });
+
+  it("marks mismatched characters in the prompt", () => {
+    const { container } = render(<TypingPracticeApp />);
+    fireEvent.change(screen.getByLabelText("닉네임"), { target: { value: "Misty" } });
+    fireEvent.click(screen.getByRole("button", { name: "연습 시작" }));
+
+    fireEvent.change(screen.getByLabelText("입력"), { target: { value: "X" } });
+
+    const incorrectCharacter = container.querySelector(".incorrect-char");
+    expect(incorrectCharacter).toHaveTextContent("아");
   });
 
   it("returns to setup from an active practice session", () => {

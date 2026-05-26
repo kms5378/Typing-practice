@@ -121,6 +121,18 @@ export default function TypingPracticeApp() {
     }
   }
 
+  function renderPrompt(text: string, input: string) {
+    const typedChars = Array.from(input);
+    return Array.from(text).map((char, index) => {
+      const isIncorrect = typedChars[index] !== undefined && typedChars[index] !== char;
+      return (
+        <span className={isIncorrect ? "incorrect-char" : undefined} key={`${char}-${index}`}>
+          {char}
+        </span>
+      );
+    });
+  }
+
   if (phase === "setup") {
     return (
       <main className="app-shell">
@@ -221,7 +233,9 @@ export default function TypingPracticeApp() {
 
         {phase === "practice" ? (
           <div className="typing-area">
-            <p className="sentence">{currentSentence}</p>
+            <p className="sentence" data-testid="current-prompt">
+              {renderPrompt(currentSentence, typed)}
+            </p>
             <textarea aria-label="입력" value={typed} onChange={(event) => handleTyped(event.target.value)} autoFocus />
           </div>
         ) : (

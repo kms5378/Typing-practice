@@ -90,6 +90,20 @@ export const longPracticeTexts: Record<PracticeLanguage, LongPracticeText[]> = {
       source: "고전 시풍 문단",
       text:
         "강가에는 저녁빛이 길게 누웠고 물결은 낮은 노래처럼 돌 사이를 흘렀다. 떠나는 배를 바라보던 마음은 서운함보다 고요함에 가까웠으며, 하늘의 첫 별이 떠오르자 오늘의 슬픔도 한 줄의 시처럼 멀어졌다."
+    },
+    {
+      id: "old-library",
+      title: "오래된 서가",
+      source: "고전 수필풍 산문",
+      text:
+        "오래된 서가 앞에 서면 먼지 앉은 책등마다 지나간 계절의 손길이 남아 있는 듯했다. 창밖에서는 비가 가늘게 내렸고, 책장을 넘기는 소리는 작았지만 방 안의 적막을 깨우기에는 충분했다."
+    },
+    {
+      id: "dawn-market",
+      title: "새벽 장터",
+      source: "생활 산문",
+      text:
+        "새벽 장터에는 아직 해가 다 오르지 않았는데도 사람들의 목소리가 먼저 하루를 밝혔다. 바구니에 담긴 푸른 채소와 막 피어난 김 사이로 부지런한 발걸음이 오갔고, 어린 시절의 기억은 그 냄새 속에서 조용히 되살아났다."
     }
   ],
   en: [
@@ -113,6 +127,20 @@ export const longPracticeTexts: Record<PracticeLanguage, LongPracticeText[]> = {
       source: "Poetic paragraph",
       text:
         "In the autumn room, books leaned together as if sharing memories of warmer days. A thin gold leaf rested on the windowsill, and the afternoon light crossed the floor so slowly that even the clock seemed willing to wait before naming the next hour."
+    },
+    {
+      id: "midnight-train",
+      title: "The Midnight Train",
+      source: "Classic travel prose",
+      text:
+        "The midnight train moved through the valley with a low and steady sound, passing farms where no lamp remained awake. Inside the carriage, an old traveler folded his newspaper and watched the dark glass, as though the window might return a forgotten face from years before."
+    },
+    {
+      id: "silver-orchard",
+      title: "The Silver Orchard",
+      source: "Pastoral prose",
+      text:
+        "At the edge of the silver orchard, the grass was cool with morning and every branch held a bead of light. Marian walked slowly between the trees, listening to the quiet fall of leaves and wondering how a place so still could feel so full of arrival."
     }
   ]
 };
