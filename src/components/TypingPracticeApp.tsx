@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { pokemonProfiles } from "@/lib/pokemonProfiles";
-import { practiceTexts, type PracticeLanguage } from "@/lib/practiceTexts";
+import { longPracticeTexts, practiceTexts, type PracticeLanguage, type PracticeMode } from "@/lib/practiceTexts";
 import type { RankingEntry } from "@/lib/rankings";
 import { calculateAccuracy, calculateCpm, countCorrectCharacters } from "@/lib/typingMetrics";
 
@@ -13,6 +13,8 @@ export default function TypingPracticeApp() {
   const [nickname, setNickname] = useState("");
   const [pokemonId, setPokemonId] = useState(25);
   const [language, setLanguage] = useState<PracticeLanguage>("ko");
+  const [practiceMode, setPracticeMode] = useState<PracticeMode>("short");
+  const [longTextId, setLongTextId] = useState("moon-road");
   const [sentenceIndex, setSentenceIndex] = useState(0);
   const [typed, setTyped] = useState("");
   const [startedAt, setStartedAt] = useState<number | null>(null);
@@ -22,7 +24,8 @@ export default function TypingPracticeApp() {
   const [rankingMessage, setRankingMessage] = useState("");
 
   const profile = pokemonProfiles.find((item) => item.id === pokemonId) ?? pokemonProfiles[0];
-  const sentences = practiceTexts[language];
+  const longText = longPracticeTexts[language].find((item) => item.id === longTextId) ?? longPracticeTexts[language][0];
+  const sentences = practiceMode === "short" ? practiceTexts[language] : [longText.text];
   const expectedText = sentences.join("");
   const actualText = [...typedHistory, typed].join("");
   const correctCharacters = countCorrectCharacters(expectedText, actualText);
@@ -57,6 +60,11 @@ export default function TypingPracticeApp() {
     setFinishedAt(null);
     setRankings([]);
     setRankingMessage("");
+  }
+
+  function selectLanguage(nextLanguage: PracticeLanguage) {
+    setLanguage(nextLanguage);
+    setLongTextId(longPracticeTexts[nextLanguage][0].id);
   }
 
   async function finishPractice(nextHistory: string[]) {
@@ -129,13 +137,41 @@ export default function TypingPracticeApp() {
           </label>
 
           <div className="mode-row" aria-label="언어 선택">
-            <button className={language === "ko" ? "selected" : ""} onClick={() => setLanguage("ko")}>
+            <button className={language === "ko" ? "selected" : ""} onClick={() => selectLanguage("ko")}>
               한글
             </button>
-            <button className={language === "en" ? "selected" : ""} onClick={() => setLanguage("en")}>
+            <button className={language === "en" ? "selected" : ""} onClick={() => selectLanguage("en")}>
               English
             </button>
           </div>
+
+          <div className="mode-row practice-type-row" aria-label="연습 유형 선택">
+            <button className={practiceMode === "short" ? "selected" : ""} onClick={() => setPracticeMode("short")}>
+              짧은 문장
+            </button>
+            <button className={practiceMode === "long" ? "selected" : ""} onClick={() => setPracticeMode("long")}>
+              장문
+            </button>
+          </div>
+
+          {practiceMode === "long" ? (
+            <div className="passage-grid">
+              {longPracticeTexts[language].map((passage) => (
+                <button
+                  key={passage.id}
+                  className={`passage-card ${passage.id === longText.id ? "selected" : ""}`}
+                  onClick={() => setLongTextId(passage.id)}
+                  aria-label={`${passage.title} 선택`}
+                >
+                  <strong>{passage.title}</strong>
+                  <span>{passage.source}</span>
+                  <p>{passage.text}</p>
+                </button>
+              ))}
+            </div>
+          ) : (
+            <p className="practice-count">짧은 문장 {sentences.length}개를 순서대로 입력합니다.</p>
+          )}
 
           <div className="profile-grid">
             {pokemonProfiles.map((pokemon) => (

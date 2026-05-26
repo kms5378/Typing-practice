@@ -95,6 +95,10 @@ h1 {
   background: #eef2f7;
 }
 
+.practice-type-row {
+  margin-left: 12px;
+}
+
 .mode-row button,
 .primary-action,
 .profile-card {
@@ -114,6 +118,53 @@ h1 {
 .mode-row button.selected {
   background: var(--panel);
   color: var(--primary);
+}
+
+.practice-count {
+  margin: 16px 0 0;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.passage-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 12px;
+  margin: 20px 0 0;
+}
+
+.passage-card {
+  min-height: 180px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  cursor: pointer;
+  display: grid;
+  gap: 8px;
+  padding: 16px;
+  text-align: left;
+}
+
+.passage-card.selected {
+  border-color: var(--primary);
+  box-shadow: inset 0 0 0 2px var(--primary);
+}
+
+.passage-card span {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.passage-card p {
+  color: var(--muted);
+  display: -webkit-box;
+  line-height: 1.5;
+  margin: 0;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
 }
 
 .profile-grid {
@@ -306,6 +357,10 @@ h1 {
 
   .stats {
     justify-content: flex-start;
+  }
+
+  .practice-type-row {
+    margin: 12px 0 0;
   }
 
   .sentence {
