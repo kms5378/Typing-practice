@@ -80,7 +80,7 @@ describe("TypingPracticeApp", () => {
     expect(screen.queryByLabelText("입력")).not.toBeInTheDocument();
   });
 
-  it("shows result after completing all sentences", async () => {
+  it("registers ranking only after the user chooses to submit it", async () => {
     render(<TypingPracticeApp />);
     fireEvent.change(screen.getByLabelText("닉네임"), { target: { value: "Brock" } });
     fireEvent.click(screen.getByRole("button", { name: "피카츄 선택" }));
@@ -91,6 +91,11 @@ describe("TypingPracticeApp", () => {
     }
 
     expect(screen.getByText("연습 완료")).toBeInTheDocument();
+    expect(global.fetch).not.toHaveBeenCalled();
+
+    fireEvent.click(screen.getByRole("button", { name: "랭킹 등록" }));
+
     await waitFor(() => expect(screen.getByText("랭킹에 등록되었습니다.")).toBeInTheDocument());
+    expect(global.fetch).toHaveBeenCalledTimes(1);
   });
 });

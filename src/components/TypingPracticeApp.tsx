@@ -22,6 +22,8 @@ export default function TypingPracticeApp() {
   const [typedHistory, setTypedHistory] = useState<string[]>([]);
   const [rankings, setRankings] = useState<RankingEntry[]>([]);
   const [rankingMessage, setRankingMessage] = useState("");
+  const [resultHistory, setResultHistory] = useState<string[]>([]);
+  const [isSubmittingRanking, setIsSubmittingRanking] = useState(false);
 
   const profile = pokemonProfiles.find((item) => item.id === pokemonId) ?? pokemonProfiles[0];
   const longText = longPracticeTexts[language].find((item) => item.id === longTextId) ?? longPracticeTexts[language][0];
@@ -49,6 +51,8 @@ export default function TypingPracticeApp() {
     setFinishedAt(null);
     setRankings([]);
     setRankingMessage("");
+    setResultHistory([]);
+    setIsSubmittingRanking(false);
   }
 
   function resetToSetup() {
@@ -60,6 +64,8 @@ export default function TypingPracticeApp() {
     setFinishedAt(null);
     setRankings([]);
     setRankingMessage("");
+    setResultHistory([]);
+    setIsSubmittingRanking(false);
   }
 
   function selectLanguage(nextLanguage: PracticeLanguage) {
@@ -67,15 +73,18 @@ export default function TypingPracticeApp() {
     setLongTextId(longPracticeTexts[nextLanguage][0].id);
   }
 
-  async function finishPractice(nextHistory: string[]) {
-    const end = Date.now();
-    setFinishedAt(end);
+  function finishPractice(nextHistory: string[]) {
+    setFinishedAt(Date.now());
+    setResultHistory(nextHistory);
     setPhase("result");
+    setRankingMessage("");
+  }
 
+  async function submitRanking() {
     const finalExpected = sentences.join("");
-    const finalTyped = nextHistory.join("");
+    const finalTyped = resultHistory.join("");
     const finalCorrect = countCorrectCharacters(finalExpected, finalTyped);
-    const finalElapsed = startedAt ? end - startedAt : 0;
+    const finalElapsed = startedAt && finishedAt ? finishedAt - startedAt : 0;
     const finalAccuracy = calculateAccuracy(finalExpected, finalTyped);
     const finalCpm = calculateCpm(finalCorrect, finalElapsed);
 
@@ -84,6 +93,7 @@ export default function TypingPracticeApp() {
       return;
     }
 
+    setIsSubmittingRanking(true);
     try {
       const response = await fetch("/api/rankings", {
         method: "POST",
@@ -104,6 +114,8 @@ export default function TypingPracticeApp() {
       setRankingMessage("랭킹에 등록되었습니다.");
     } catch {
       setRankingMessage("랭킹 저장에 실패했습니다. Vercel KV 설정을 확인하세요.");
+    } finally {
+      setIsSubmittingRanking(false);
     }
   }
 
@@ -114,7 +126,7 @@ export default function TypingPracticeApp() {
       setTypedHistory(nextHistory);
       setTyped("");
       if (sentenceIndex === sentences.length - 1) {
-        void finishPractice(nextHistory);
+        finishPractice(nextHistory);
       } else {
         setSentenceIndex((index) => index + 1);
       }
@@ -245,6 +257,13 @@ export default function TypingPracticeApp() {
               최종 타수 {cpm} / 정확도 {accuracy}%
             </p>
             <p>{rankingMessage}</p>
+            <button
+              className="primary-action"
+              disabled={accuracy < 80 || isSubmittingRanking || rankingMessage === "랭킹에 등록되었습니다."}
+              onClick={() => void submitRanking()}
+            >
+              {isSubmittingRanking ? "등록 중" : "랭킹 등록"}
+            </button>
             <h3>랭킹 Top 10</h3>
             <ol className="ranking-list">
               {rankings.map((entry) => (

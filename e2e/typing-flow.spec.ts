@@ -38,5 +38,7 @@ test("completes the Korean typing flow", async ({ page }) => {
 
   await expect(page.getByText("연습 완료")).toBeVisible();
   await expect(page.getByText(/최종 타수/)).toBeVisible();
+  await expect(page.getByText("랭킹에 등록되었습니다.")).not.toBeVisible();
+  await page.getByRole("button", { name: "랭킹 등록" }).click();
   await expect(page.getByText("랭킹에 등록되었습니다.")).toBeVisible();
 });
