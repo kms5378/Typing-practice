@@ -7,6 +7,8 @@ export type LongPracticeText = {
   text: string;
 };
 
+export const SHORT_SESSION_SENTENCE_COUNT = 5;
+
 const koSubjects = [
   "아침 햇살",
   "작은 책상",
@@ -67,6 +69,23 @@ export const practiceTexts: Record<PracticeLanguage, string[]> = {
   ko: buildSentences(koSubjects, koActions),
   en: buildSentences(enSubjects, enActions)
 };
+
+export function getRandomPracticeSet(texts: string[], count = SHORT_SESSION_SENTENCE_COUNT, random = Math.random) {
+  const targetCount = Math.min(count, texts.length);
+  const selectedIndexes = new Set<number>();
+  let attempts = 0;
+
+  while (selectedIndexes.size < targetCount && attempts < texts.length * 10) {
+    selectedIndexes.add(Math.floor(random() * texts.length));
+    attempts += 1;
+  }
+
+  for (let index = 0; selectedIndexes.size < targetCount && index < texts.length; index += 1) {
+    selectedIndexes.add(index);
+  }
+
+  return Array.from(selectedIndexes).map((index) => texts[index]);
+}
 
 export const longPracticeTexts: Record<PracticeLanguage, LongPracticeText[]> = {
   ko: [

@@ -42,7 +42,7 @@ describe("TypingPracticeApp", () => {
     fireEvent.change(screen.getByLabelText("닉네임"), { target: { value: "Misty" } });
     fireEvent.click(screen.getByRole("button", { name: "피카츄 선택" }));
     fireEvent.click(screen.getByRole("button", { name: "연습 시작" }));
-    expect(screen.getByTestId("current-prompt")).toHaveTextContent(practiceTexts.ko[0]);
+    expect(practiceTexts.ko).toContain(screen.getByTestId("current-prompt").textContent);
   });
 
   it("starts long-form Korean practice from the long practice tab", () => {
@@ -60,10 +60,11 @@ describe("TypingPracticeApp", () => {
     fireEvent.change(screen.getByLabelText("닉네임"), { target: { value: "Misty" } });
     fireEvent.click(screen.getByRole("button", { name: "연습 시작" }));
 
+    const expectedFirstCharacter = Array.from(screen.getByTestId("current-prompt").textContent ?? "")[0];
     fireEvent.change(screen.getByLabelText("입력"), { target: { value: "X" } });
 
     const incorrectCharacter = container.querySelector(".incorrect-char");
-    expect(incorrectCharacter).toHaveTextContent("아");
+    expect(incorrectCharacter).toHaveTextContent(expectedFirstCharacter);
   });
 
   it("returns to setup from an active practice session", () => {
@@ -86,8 +87,9 @@ describe("TypingPracticeApp", () => {
     fireEvent.click(screen.getByRole("button", { name: "피카츄 선택" }));
     fireEvent.click(screen.getByRole("button", { name: "연습 시작" }));
 
-    for (const sentence of practiceTexts.ko) {
-      fireEvent.change(screen.getByLabelText("입력"), { target: { value: sentence } });
+    for (let count = 0; count < 5; count += 1) {
+      const currentPrompt = screen.getByTestId("current-prompt").textContent ?? "";
+      fireEvent.change(screen.getByLabelText("입력"), { target: { value: currentPrompt } });
     }
 
     expect(screen.getByText("연습 완료")).toBeInTheDocument();
@@ -97,5 +99,25 @@ describe("TypingPracticeApp", () => {
 
     await waitFor(() => expect(screen.getByText("랭킹에 등록되었습니다.")).toBeInTheDocument());
     expect(global.fetch).toHaveBeenCalledTimes(1);
+  });
+
+  it("finishes short practice after five random sentences and submits that count", async () => {
+    render(<TypingPracticeApp />);
+    fireEvent.change(screen.getByLabelText("닉네임"), { target: { value: "Brock" } });
+    fireEvent.click(screen.getByRole("button", { name: "연습 시작" }));
+
+    for (let count = 0; count < 5; count += 1) {
+      const currentPrompt = screen.getByTestId("current-prompt").textContent ?? "";
+      fireEvent.change(screen.getByLabelText("입력"), { target: { value: currentPrompt } });
+    }
+
+    expect(screen.getByText("연습 완료")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "랭킹 등록" }));
+
+    await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
+    expect(JSON.parse((global.fetch as ReturnType<typeof vi.fn>).mock.calls[0][1].body)).toMatchObject({
+      completedSentences: 5
+    });
   });
 });

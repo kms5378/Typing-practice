@@ -19,7 +19,7 @@ test("completes the Korean typing flow", async ({ page }) => {
             cpm: 200,
             accuracy: 100,
             elapsedMs: 60_000,
-            completedSentences: 100,
+            completedSentences: 5,
             createdAt: "2026-05-26T00:00:00.000Z"
           }
         ]
@@ -32,8 +32,10 @@ test("completes the Korean typing flow", async ({ page }) => {
   await page.getByRole("button", { name: "피카츄 선택" }).click();
   await page.getByRole("button", { name: "연습 시작" }).click();
 
-  for (const sentence of practiceTexts.ko) {
-    await page.getByLabel("입력").fill(sentence);
+  for (let count = 0; count < 5; count += 1) {
+    const sentence = await page.getByTestId("current-prompt").textContent();
+    expect(practiceTexts.ko).toContain(sentence);
+    await page.getByLabel("입력").fill(sentence ?? "");
   }
 
   await expect(page.getByText("연습 완료")).toBeVisible();

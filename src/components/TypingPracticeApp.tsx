@@ -2,7 +2,14 @@
 
 import { useMemo, useState } from "react";
 import { pokemonProfiles } from "@/lib/pokemonProfiles";
-import { longPracticeTexts, practiceTexts, type PracticeLanguage, type PracticeMode } from "@/lib/practiceTexts";
+import {
+  getRandomPracticeSet,
+  longPracticeTexts,
+  practiceTexts,
+  SHORT_SESSION_SENTENCE_COUNT,
+  type PracticeLanguage,
+  type PracticeMode
+} from "@/lib/practiceTexts";
 import type { RankingEntry } from "@/lib/rankings";
 import { calculateAccuracy, calculateCpm, countCorrectCharacters } from "@/lib/typingMetrics";
 
@@ -24,10 +31,15 @@ export default function TypingPracticeApp() {
   const [rankingMessage, setRankingMessage] = useState("");
   const [resultHistory, setResultHistory] = useState<string[]>([]);
   const [isSubmittingRanking, setIsSubmittingRanking] = useState(false);
+  const [shortSessionSentences, setShortSessionSentences] = useState<string[]>([]);
 
   const profile = pokemonProfiles.find((item) => item.id === pokemonId) ?? pokemonProfiles[0];
   const longText = longPracticeTexts[language].find((item) => item.id === longTextId) ?? longPracticeTexts[language][0];
-  const sentences = practiceMode === "short" ? practiceTexts[language] : [longText.text];
+  const activeShortSentences =
+    shortSessionSentences.length > 0
+      ? shortSessionSentences
+      : practiceTexts[language].slice(0, SHORT_SESSION_SENTENCE_COUNT);
+  const sentences = practiceMode === "short" ? activeShortSentences : [longText.text];
   const expectedText = sentences.join("");
   const actualText = [...typedHistory, typed].join("");
   const correctCharacters = countCorrectCharacters(expectedText, actualText);
@@ -43,6 +55,9 @@ export default function TypingPracticeApp() {
 
   function startPractice() {
     if (!nickname.trim()) return;
+    setShortSessionSentences(
+      practiceMode === "short" ? getRandomPracticeSet(practiceTexts[language], SHORT_SESSION_SENTENCE_COUNT) : []
+    );
     setPhase("practice");
     setSentenceIndex(0);
     setTyped("");
@@ -66,11 +81,13 @@ export default function TypingPracticeApp() {
     setRankingMessage("");
     setResultHistory([]);
     setIsSubmittingRanking(false);
+    setShortSessionSentences([]);
   }
 
   function selectLanguage(nextLanguage: PracticeLanguage) {
     setLanguage(nextLanguage);
     setLongTextId(longPracticeTexts[nextLanguage][0].id);
+    setShortSessionSentences([]);
   }
 
   function finishPractice(nextHistory: string[]) {
@@ -194,7 +211,9 @@ export default function TypingPracticeApp() {
               ))}
             </div>
           ) : (
-            <p className="practice-count">짧은 문장 {sentences.length}개를 순서대로 입력합니다.</p>
+            <p className="practice-count">
+              짧은 문장 {practiceTexts[language].length}개 중 랜덤 {SHORT_SESSION_SENTENCE_COUNT}개를 입력합니다.
+            </p>
           )}
 
           <div className="profile-grid">
