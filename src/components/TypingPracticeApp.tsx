@@ -119,6 +119,7 @@ export default function TypingPracticeApp() {
           nickname,
           pokemonId,
           language,
+          practiceMode,
           cpm: finalCpm,
           accuracy: finalAccuracy,
           elapsedMs: finalElapsed,
